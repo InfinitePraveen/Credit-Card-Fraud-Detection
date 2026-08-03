@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 Fraud Detection Result</h1>
+            <p class="subtitle">Analysis complete</p>
+        </div>
+
+        <div class="result-container">
+            <div class="result-card {% if result.prediction == 1 %}fraud{% else %}legitimate{% endif %}">
+                <div class="result-icon">
+                    {% if result.prediction == 1 %}
+                    ⚠️
+                    {% else %}
+                    ✅
+                    {% endif %}
+                </div>
+                <h2>{{ result.status }}</h2>
+                <div class="confidence">
+                    <span class="label">Confidence:</span>
+                    <span class="value">{{ "%.2f"|format(result.confidence) }}%</span>
+                </div>
+                <div class="probability-bar">
+                    <div class="bar-fill" style="width: {{ result.confidence }}%"></div>
+                </div>
+                <p class="message">{{ result.message }}</p>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="label">Prediction Score:</span>
+                        <span class="value">{{ "%.4f"|format(result.probability) }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Risk Level:</span>
+                        <span class="value {% if result.prediction == 1 %}high-risk{% else %}low-risk{% endif %}">
+                            {% if result.prediction == 1 %}High Risk{% else %}Low Risk{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="/" class="btn-primary">🔍 Analyze Another Transaction</a>
+                <a href="/" class="btn-secondary">↺ Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
