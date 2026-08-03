@@ -12,44 +12,51 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💳 Fraud Detection Result</h1>
-            <p class="subtitle">Analysis complete</p>
+            <h1>💳 Detection Result</h1>
+            <p class="subtitle">Transaction analysis complete</p>
         </div>
 
         <div class="result-container">
             <div class="result-card {% if result.prediction == 1 %}fraud{% else %}legitimate{% endif %}">
                 <div class="result-icon">
                     {% if result.prediction == 1 %}
-                    ⚠️
+                    🚨
                     {% else %}
                     ✅
                     {% endif %}
                 </div>
                 <h2>{{ result.status }}</h2>
-                <div class="confidence">
-                    <span class="label">Confidence:</span>
-                    <span class="value">{{ "%.2f"|format(result.confidence) }}%</span>
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Amount:</span>
+                        <span class="detail-value">€{{ "%.2f"|format(result.amount) }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Time:</span>
+                        <span class="detail-value">{{ "%.0f"|format(result.time) }} seconds</span>
+                    </div>
                 </div>
-                <div class="probability-bar">
-                    <div class="bar-fill" style="width: {{ result.confidence }}%"></div>
+                <div class="confidence-section">
+                    <div class="confidence-label">
+                        <span>Confidence Score</span>
+                        <span class="confidence-value">{{ "%.1f"|format(result.confidence) }}%</span>
+                    </div>
+                    <div class="probability-bar">
+                        <div class="bar-fill {% if result.prediction == 1 %}fraud-bar{% else %}legit-bar{% endif %}"
+                            style="width: {{ result.confidence }}%"></div>
+                    </div>
                 </div>
                 <p class="message">{{ result.message }}</p>
-                <div class="result-details">
-                    <div class="detail-item">
-                        <span class="label">Prediction Score:</span>
-                        <span class="value">{{ "%.4f"|format(result.probability) }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Risk Level:</span>
-                        <span class="value {% if result.prediction == 1 %}high-risk{% else %}low-risk{% endif %}">
-                            {% if result.prediction == 1 %}High Risk{% else %}Low Risk{% endif %}
-                        </span>
-                    </div>
+                <div class="risk-indicator">
+                    <span class="risk-label">Risk Level:</span>
+                    <span class="risk-value {% if result.prediction == 1 %}high-risk{% else %}low-risk{% endif %}">
+                        {% if result.prediction == 1 %}🔴 High Risk{% else %}🟢 Low Risk{% endif %}
+                    </span>
                 </div>
             </div>
 
             <div class="action-buttons">
-                <a href="/" class="btn-primary">🔍 Analyze Another Transaction</a>
+                <a href="/" class="btn-primary">🔍 Analyze Another</a>
                 <a href="/" class="btn-secondary">↺ Go Back</a>
             </div>
         </div>
