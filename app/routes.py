@@ -14,6 +14,9 @@ except Exception as e:
     model = None
     scaler = None
 
+# Default values for V1-V28 (set to 0 as PCA components)
+DEFAULT_VALUES = {f"V{i}": 0.0 for i in range(1, 29)}
+
 
 @app.route("/")
 def index():
@@ -30,14 +33,12 @@ def predict():
             data = request.get_json()
             amount = float(data.get("amount", 0))
             time = float(data.get("time", 0))
-            v_features = [float(data.get(f"v{i}", 0)) for i in range(1, 29)]
         else:
             amount = float(request.form.get("amount", 0))
             time = float(request.form.get("time", 0))
-            v_features = [float(request.form.get(f"v{i}", 0)) for i in range(1, 29)]
 
-        # Create feature array
-        features = [time] + v_features + [amount]
+        # Create feature array with default V1-V28 values
+        features = [time] + [DEFAULT_VALUES[f"V{i}"] for i in range(1, 29)] + [amount]
         feature_names = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
 
         # Scale features
@@ -55,10 +56,12 @@ def predict():
             "confidence": float(probability[1] * 100),
             "status": "Fraudulent" if prediction == 1 else "Legitimate",
             "message": (
-                "This transaction appears to be fraudulent!"
+                "⚠️ This transaction appears to be FRAUDULENT! Please investigate."
                 if prediction == 1
-                else "This transaction appears to be legitimate."
+                else "✅ This transaction appears to be LEGITIMATE."
             ),
+            "amount": amount,
+            "time": time,
         }
 
         if request.is_json:
@@ -81,15 +84,17 @@ def api_predict():
         data = request.get_json()
 
         # Validate input
-        required_fields = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
-        for field in required_fields:
-            if field not in data:
-                return jsonify({"error": f"Missing field: {field}"}), 400
+        if "amount" not in data or "time" not in data:
+            return (
+                jsonify({"error": "Missing fields: amount and time are required"}),
+                400,
+            )
 
-        # Create feature array
-        features = (
-            [data["Time"]] + [data[f"V{i}"] for i in range(1, 29)] + [data["Amount"]]
-        )
+        amount = float(data["amount"])
+        time = float(data["time"])
+
+        # Create feature array with default V1-V28 values
+        features = [time] + [DEFAULT_VALUES[f"V{i}"] for i in range(1, 29)] + [amount]
         feature_names = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
 
         # Scale features
@@ -106,6 +111,8 @@ def api_predict():
                 "probability": float(probability[1]),
                 "confidence": float(probability[1] * 100),
                 "status": "Fraudulent" if prediction == 1 else "Legitimate",
+                "amount": amount,
+                "time": time,
             }
         )
 
