@@ -113,6 +113,7 @@ Credit-Card-Fraud-Detection/
 ├── .gitignore                     # Git ignore file
 ├── .gitattributes                 # Git attributes for large files
 ├── requirements.txt               # Project dependencies
+├── LICENSE.md                     # License file
 └── README.md                      # You are here!
 ```
 
@@ -144,7 +145,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ## 📝 License
 
-Distributed under the MIT License. See `LICENSE` (or consider adding a LICENSE file) for more information.
+Distributed under the MIT License. See [`LICENSE`](https://github.com/InfinitePraveen/Credit-Card-Fraud-Detection/blob/main/LICENSE) for more information.
 
 ## 📧 Contact
 
