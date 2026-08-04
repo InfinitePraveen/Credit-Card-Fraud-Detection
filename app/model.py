@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "model.pkl"
+MODEL_PATH = BASE_DIR / "data" / "xgb_model.pkl"
 DATA_PATH = BASE_DIR / "data" / "creditcard.csv"
 
 FEATURE_COLUMNS = [
