@@ -1,7 +1,14 @@
 from flask import Flask
-from flask_cors import CORS
+from .routes import main
 
-app = Flask(__name__)
+
+def create_app():
+    app = Flask(__name__, template_folder="templates", static_folder="static")
+    app.register_blueprint(main)
+    return app
+
+
+app = create_app()
 CORS(app)
 
 from app import routes
